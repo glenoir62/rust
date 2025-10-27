@@ -1,4 +1,4 @@
-fn main() {
+pub fn lifetime_test() {
     /*
         'a = un nom de lifetime (durée de vie)
         &'a i32 = une référence vers un i32 qui vit pendant 'a
@@ -16,7 +16,7 @@ fn main() {
     //                                └──────────┘
     //                           resultat emprunte l'un des deux
     // │
-    println!("{resultat}");  // │ resultat est valide ici
+    println!("lifetime {resultat}");  // │ resultat est valide ici
     // │
 }                            // ┘ tout est détruit ici
 

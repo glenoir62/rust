@@ -17,16 +17,16 @@ impl Affichable for i32 {
 }
 
 // Un trait pour calculer l'aire
-trait Aire {
+pub(crate)  trait Aire {
     fn aire(&self) -> f64;
 }
 
-pub struct Rectangle {
+pub(crate)  struct Rectangle {
     pub largeur: f64,
     pub hauteur: f64,
 }
 
-pub struct Cercle {
+pub(crate)  struct Cercle {
     pub rayon: f64,
 }
 

@@ -2,10 +2,12 @@ mod lifetime;
 mod trait_test;
 mod generic_test;
 mod closure_function_high_test;
+mod option_test;
 
 use closure_function_high_test::{doubler, appliquer, closure_test};
 use trait_test::{Affichable, Rectangle, Cercle, afficher_aire};
 use crate::generic_test::{afficher_contenu, plus_grand};
+use crate::option_test::option_test;
 
 fn main() {
     println!("Hello, world,test!");
@@ -58,5 +60,8 @@ fn main() {
     println!("Résultat closure : {}", resultat); // Résultat : 50
 
     closure_test();
+
+    // Option
+    option_test();
 
 }

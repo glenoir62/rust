@@ -48,7 +48,7 @@ pub fn closure_test() {
         .map(|p| p.prix)                           // Extraire les prix
         .sum();                                    // Sommer
 
-    println!("Total des produits disponibles < 500€: {:.2}€", total_disponible);
+    println!("closure_test Total des produits disponibles < 500€: {:.2}€", total_disponible);
 
     // Trouver le produit le moins cher en stock
     let moins_cher = produits.iter()
@@ -56,7 +56,7 @@ pub fn closure_test() {
         .min_by(|a, b| a.prix.partial_cmp(&b.prix).unwrap());
 
     if let Some(produit) = moins_cher {
-        println!("Produit le moins cher: {} à {:.2}€", produit.nom, produit.prix);
+        println!("closure_test Produit le moins cher: {} à {:.2}€", produit.nom, produit.prix);
     }
 
     // Créer une fonction de réduction personnalisée
@@ -66,5 +66,5 @@ pub fn closure_test() {
 
     let reduction_20 = appliquer_reduction(20.0);
     let prix_reduit = reduction_20(100.0);
-    println!("Prix après réduction: {:.2}€", prix_reduit);  // 80.00€
+    println!("closure_test Prix après réduction: {:.2}€", prix_reduit);  // 80.00€
 }

@@ -1,0 +1,56 @@
+[workspace]
+resolver = "2"
+members = [
+    "contexts/ordering",
+#    "contexts/payment",
+#    "contexts/notification",
+    "shared",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["GLEO <gleo@example.com>"]
+license = "MIT"
+
+[workspace.dependencies]
+# Web Framework
+axum = "0.8.6"
+tower = "0.5.2"
+tower-http = { version = "0.6.6", features = ["cors", "trace"] }
+
+# Database ORM
+sea-orm = { version = "2.0.0-rc.18", features = ["sqlx-postgres", "runtime-tokio-native-tls", "macros"] }
+sea-orm-migration = "2.0.0-rc.18"
+
+# Message Broker
+iggy = "0.8.0-edge.2"
+
+# Async Runtime
+tokio = { version = "1.48.0", features = ["full"] }
+async-trait = "0.1.89"
+
+# Serialization
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+
+# UUID & Time
+uuid = { version = "1.18.1", features = ["v4", "serde"] }
+chrono = { version = "0.4.42", features = ["serde"] }
+
+# Decimal for money
+rust_decimal = { version = "1.39.0", features = ["serde"] }
+
+# Error Handling
+thiserror = "2.0.17"
+anyhow = "1.0.100"
+
+# Logging
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.20", features = ["env-filter"] }
+
+# Environment
+dotenvy = "0.15.7"
+
+# Testing
+mockall = "0.13.1"

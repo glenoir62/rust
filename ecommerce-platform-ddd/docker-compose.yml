@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecommerce-postgres
+    environment:
+      POSTGRES_USER: ecommerce
+      POSTGRES_PASSWORD: ecommerce123
+      POSTGRES_DB: orders
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecommerce"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  iggy:
+    image: iggyrs/iggy:latest
+    container_name: ecommerce-iggy
+    ports:
+      - "8090:8090"  # TCP
+      - "8080:8080"  # HTTP
+      - "3000:3000"  # QUIC
+    volumes:
+      - iggy_data:/data
+    environment:
+      - IGGY_LOG_LEVEL=info
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  order-service:
+    build:
+      context: .
+      dockerfile: contexts/ordering/Dockerfile
+    container_name: ecommerce-order-service
+    ports:
+      - "3001:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      iggy:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://ecommerce:ecommerce123@postgres/orders
+      IGGY_SERVER_ADDR: iggy:8090
+      RUST_LOG: info
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  iggy_data:
+
+networks:
+  default:
+    name: ecommerce-network

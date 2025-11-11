@@ -3,9 +3,12 @@ mod trait_test;
 mod generic_test;
 mod closure_function_high_test;
 mod option_test;
+mod trait_struct;
 
+use std::cmp::Ordering;
 use closure_function_high_test::{doubler, appliquer, closure_test};
 use trait_test::{Affichable, Rectangle, Cercle, afficher_aire};
+
 use crate::generic_test::{afficher_contenu, plus_grand};
 use crate::option_test::option_test;
 
@@ -63,5 +66,27 @@ fn main() {
 
     // Option
     option_test();
+
+    //struct trait
+    let rect1 = trait_struct::Rectangle::new(10, 20);
+
+    let area1 = rect1.area();
+    println!("Superficie du rectangle : {}", area1);
+    println!("Struct traits ->");
+
+    #[derive(PartialOrd, PartialEq)]
+    struct Temperature {
+        value: f64,
+    }
+
+    let hot = Temperature { value: 30.0 };
+    let cold = Temperature { value: 10.0 };
+
+    match hot.partial_cmp(&cold) {
+        Some(Ordering::Greater) => println!("It's hot!"),
+        Some(Ordering::Less) => println!("It's cold!"),
+        Some(Ordering::Equal) => println!("It's the same temperature."),
+        None => println!("Temperature comparison is not defined."),
+    }
 
 }

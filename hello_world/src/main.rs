@@ -8,6 +8,7 @@ mod trait_struct;
 use std::cmp::Ordering;
 use closure_function_high_test::{doubler, appliquer, closure_test};
 use trait_test::{Affichable, Rectangle, Cercle, afficher_aire};
+use trait_struct::rectangle::Rectangle as OtherRectangle;
 
 use crate::generic_test::{afficher_contenu, plus_grand};
 use crate::option_test::option_test;
@@ -68,7 +69,7 @@ fn main() {
     option_test();
 
     //struct trait
-    let rect1 = trait_struct::Rectangle::new(10, 20);
+    let rect1 = OtherRectangle::new(10, 20);
 
     let area1 = rect1.area();
     println!("Superficie du rectangle : {}", area1);

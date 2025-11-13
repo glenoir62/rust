@@ -1,0 +1,189 @@
+csv_management/
+│
+├── 📄 Cargo.toml                    # Configuration du projet et dépendances
+│
+├── 📚 Documentation
+│   ├── README.md                    # Vue d'ensemble et utilisation
+│   ├── ARCHITECTURE.md              # Explication de l'architecture
+│   └── INSTALL.md                   # Instructions d'installation
+│
+├── 📊 Données de test
+│   └── data.csv                     # Fichier CSV d'exemple
+│
+└── 💻 Code source (src/)
+    │
+    ├── 🎯 Points d'entrée
+    │   ├── lib.rs                   # Interface de la bibliothèque
+    │   └── main.rs                  # Exemples d'utilisation
+    │
+    └── 🔧 Modules fonctionnels
+        ├── models.rs                # Structure Person
+        ├── reader.rs                # Lecture CSV (brute + désérialisation)
+        ├── writer.rs                # Écriture CSV (manuelle + sérialisation)
+        ├── appender.rs              # Ajout d'enregistrements
+        └── updater.rs               # Mise à jour et suppression
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+DÉTAIL DES FICHIERS
+═══════════════════════════════════════════════════════════════════════════════
+
+📄 Cargo.toml (24 lignes)
+├─ Configuration du projet
+├─ Nom, version, édition Rust
+└─ Dépendances : csv, serde
+
+📚 README.md (120+ lignes)
+├─ Structure du projet
+├─ Fonctionnalités principales
+├─ Exemples d'utilisation
+├─ Dépendances
+└─ Principes d'organisation
+
+📚 ARCHITECTURE.md (300+ lignes)
+├─ Diagrammes de l'architecture
+├─ Détail de chaque module
+├─ Flux de données
+├─ Principes de conception
+└─ Évolutions futures
+
+📚 INSTALL.md (150+ lignes)
+├─ Prérequis
+├─ Instructions d'installation
+├─ Commandes utiles
+└─ Résolution de problèmes
+
+📊 data.csv
+├─ name,age,city
+├─ John,30,New York
+├─ Jane,25,San Francisco
+└─ Bob,35,Chicago
+
+💻 lib.rs (15 lignes)
+├─ Déclaration des modules
+└─ Ré-exportation des types et fonctions
+
+💻 main.rs (150+ lignes)
+├─ Fonction main()
+└─ 7 démonstrations complètes :
+    ├─ DÉMO 1: Écriture CSV
+    ├─ DÉMO 2: Lecture brute
+    ├─ DÉMO 3: Lecture avec désérialisation
+    ├─ DÉMO 4: Ajout d'enregistrement
+    ├─ DÉMO 5: Mise à jour
+    ├─ DÉMO 6: Écriture avec sérialisation
+    └─ DÉMO 7: Suppression
+
+💻 models.rs (25 lignes)
+├─ struct Person
+│   ├─ name: String
+│   ├─ age: u32
+│   └─ city: String
+└─ Méthodes :
+    ├─ new()
+    └─ display()
+
+💻 reader.rs (40 lignes)
+├─ read_csv_raw()
+│   └─ Lecture ligne par ligne (String)
+└─ read_csv_deserialize()
+    └─ Désérialisation en Vec<Person>
+
+💻 writer.rs (60 lignes)
+├─ write_csv()
+│   └─ Écriture manuelle avec en-têtes
+├─ write_csv_serialize()
+│   └─ Sérialisation automatique
+└─ get_sample_data()
+    └─ Retourne des données de test
+
+💻 appender.rs (40 lignes)
+└─ append_to_csv()
+    ├─ Vérifie si le fichier existe
+    ├─ Crée les en-têtes si nécessaire
+    └─ Ajoute l'enregistrement
+
+💻 updater.rs (70 lignes)
+├─ update_csv()
+│   └─ Fonction générique avec closure
+├─ update_age_by_name()
+│   └─ Met à jour l'âge d'une personne
+└─ delete_by_name()
+    └─ Supprime une personne par nom
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+LIGNES DE CODE PAR MODULE
+═══════════════════════════════════════════════════════════════════════════════
+
+models.rs       ~25 lignes
+reader.rs       ~40 lignes
+writer.rs       ~60 lignes
+appender.rs     ~40 lignes
+updater.rs      ~70 lignes
+lib.rs          ~15 lignes
+main.rs         ~150 lignes
+─────────────────────────────
+TOTAL           ~400 lignes
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+DÉPENDANCES ENTRE MODULES
+═══════════════════════════════════════════════════════════════════════════════
+
+models.rs
+    ↑
+    │ (utilisé par)
+    │
+    ├─ reader.rs
+    ├─ writer.rs
+    ├─ appender.rs
+    └─ updater.rs
+        ↑
+        │ (tous exposés par)
+        │
+        lib.rs
+        ↑
+        │ (utilisé par)
+        │
+        main.rs
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+OPÉRATIONS SUPPORTÉES
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ CREATE   → write_csv(), write_csv_serialize()
+✅ READ     → read_csv_raw(), read_csv_deserialize()
+✅ UPDATE   → update_csv(), update_age_by_name()
+✅ DELETE   → delete_by_name()
+✅ APPEND   → append_to_csv()
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+FORMATS DE DONNÉES
+═══════════════════════════════════════════════════════════════════════════════
+
+CSV (lecture/écriture)
+    ↕
+Person (struct Rust)
+    ↕
+Sérialisation/Désérialisation automatique (serde)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+POUR COMMENCER
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Lire README.md          → Comprendre les fonctionnalités
+2. Lire ARCHITECTURE.md    → Comprendre l'organisation
+3. Lire INSTALL.md         → Installer et compiler
+4. Exécuter cargo run      → Voir les démonstrations
+5. Explorer src/main.rs    → Étudier les exemples
+6. Modifier pour vos besoins → Adapter à votre projet

@@ -1,12 +1,12 @@
 use crate::models::user::User;
 use rusqlite::{Connection, Result};
 
-pub fn add_score(conn: &Connection, user_id: i64, game_id: i64, score: i64) {
+pub fn add_score(conn: &Connection, user_id: i64, game_id: i64, score: i64) -> Result<()> {
     conn.execute(
         "INSERT INTO scores (user_id, game_id, score) VALUES (?1, ?2, ?3)",
         &[&user_id, &game_id, &score],
-    )
-        .expect("Erreur lors de l'ajout du score");
+    )?;
+    Ok(())
 }
 
 pub fn show_all_scores(conn: &Connection, user: &User) -> Result<()> {
@@ -22,7 +22,7 @@ pub fn show_all_scores(conn: &Connection, user: &User) -> Result<()> {
     let mut rows = stmt.query(rusqlite::params![user.name])?;
     while let Some(row) = rows.next()? {
         let game: String = row.get(0)?;
-        let score: i32 = row.get(1)?;
+        let score: i64 = row.get(1)?;
         println!("Jeu : {}, Score : {}", game, score);
     }
     Ok(())

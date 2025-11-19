@@ -8,7 +8,7 @@ pub fn play_game() -> i64 {
 
     // Génération d'un nombre aléatoire entre 1 et 100
     let mut rng = rand::thread_rng();
-    let nombre_secret = rng.gen_range(1..words.len());
+    let nombre_secret = rng.gen_range(0..words.len());
     let target_word = words.get(nombre_secret).unwrap();
 
     // Conversion du mot cible en vecteur de caractères pour faciliter la manipulation
@@ -16,7 +16,6 @@ pub fn play_game() -> i64 {
 
     // Vecteur pour stocker les lettres correctes devinées
     let mut correct_guesses: Vec<char> = vec![' '; target_word.len()];
-    let mut misplaced_guesses: Vec<char>;
     let mut nombre_essai = 10;
     let score_final: i64;
 
@@ -25,7 +24,7 @@ pub fn play_game() -> i64 {
 
     loop {
         // Demande à l'utilisateur de proposer un mot
-        println!("Devinez le mot ({} lettres) :", target_word.len());
+        println!("\nDevinez le mot ({} lettres) :", target_word.len());
         let mut user_input = String::new();
         io::stdin()
             .read_line(&mut user_input)
@@ -42,39 +41,45 @@ pub fn play_game() -> i64 {
         }
 
         // Conversion de l'entrée de l'utilisateur en vecteur de caractères
-        let user_chars: Vec<char> = user_input.trim().chars().collect();
+        let user_chars: Vec<char> = user_input.chars().collect();
 
-        // Vérifie les lettres correctes et mal placées
-        misplaced_guesses = Vec::new();
+        // Vérifie les lettres correctes et mal placées POUR CE TOUR UNIQUEMENT
+        let mut current_correct: Vec<char> = vec![' '; target_word.len()];
+        let mut misplaced_guesses: Vec<char> = Vec::new();
+
         for (index, &user_char) in user_chars.iter().enumerate() {
-            if let Some(char) = target_chars.get(index) {
-                if char.eq(&user_char) {
-                    correct_guesses[index] = user_char;
-                } else {
-                    correct_guesses[index] = ' ';
-                    if target_chars.contains(&user_char) {
-                        misplaced_guesses.push(user_char);
-                    }
-                }
+            if target_chars[index] == user_char {
+                // Lettre bien placée
+                current_correct[index] = user_char;
+                correct_guesses[index] = user_char; // Sauvegarde pour les tours suivants
+            } else if target_chars.contains(&user_char) {
+                // Lettre présente mais mal placée
+                misplaced_guesses.push(user_char);
             }
         }
 
         // Vérifie si l'utilisateur a deviné le mot correctement
         if correct_guesses.iter().all(|&x| x != ' ') {
-            println!("Félicitations! Vous avez deviné le mot : {}", target_word);
+            println!("\n🎉 Félicitations! Vous avez deviné le mot : {}", target_word);
             score_final = nombre_essai * 10;
             break;
         }
 
-        println!("\nLettres correctes et bien placées: {:?}", correct_guesses);
-        println!(
-            "\nLettres correctes mais mal placées: {:?}",
-            misplaced_guesses
-        );
-        println!("Réessayez!\n");
+        // Affichage des résultats
+        println!("\nLettres correctes et bien placées: {:?}", current_correct);
+        println!("Lettres correctes mais mal placées: {:?}", misplaced_guesses);
+        println!("Progression globale: {:?}", correct_guesses);
+
         if nombre_essai > 0 {
             nombre_essai -= 1;
         }
+
+        if nombre_essai == 0 {
+            println!("\n❌ Perdu! Le mot était : {}", target_word);
+            score_final = 0;
+            break;
+        }
+
         println!("Il vous reste {} essais !", nombre_essai);
     }
     score_final

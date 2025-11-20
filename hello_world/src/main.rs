@@ -1,14 +1,16 @@
-mod lifetime;
-mod trait_test;
-mod generic_test;
 mod closure_function_high_test;
+mod generic_test;
+mod lifetime;
 mod option_test;
 mod trait_struct;
+mod trait_test;
 
+use closure_function_high_test::{appliquer, closure_test, doubler};
 use std::cmp::Ordering;
-use closure_function_high_test::{doubler, appliquer, closure_test};
-use trait_test::{Affichable, Rectangle, Cercle, afficher_aire};
 use trait_struct::rectangle::Rectangle as OtherRectangle;
+use trait_test::{Affichable, Cercle, Rectangle, afficher_aire};
+use std::thread;
+use std::time::Duration;
 
 use crate::generic_test::{afficher_contenu, plus_grand};
 use crate::option_test::option_test;
@@ -20,12 +22,14 @@ fn main() {
     let x: i32 = 33;
     x.afficher();
 
-
-    let rect = Rectangle { largeur: 5.0, hauteur: 3.0 };
+    let rect = Rectangle {
+        largeur: 5.0,
+        hauteur: 3.0,
+    };
     let cercle = Cercle { rayon: 2.0 };
 
-    afficher_aire(&rect);    // Aire: 15.00
-    afficher_aire(&cercle);  // Aire: 12.57
+    afficher_aire(&rect); // Aire: 15.00
+    afficher_aire(&cercle); // Aire: 12.57
 
     //lifetime
     lifetime::lifetime_test();
@@ -51,7 +55,6 @@ fn main() {
     let ma_fonction = doubler;
     let resultat = ma_fonction(5);
     println!("Résultat : {}", resultat); // Résultat : 10
-
 
     let resultat = appliquer(doubler, 5);
     println!("Résultat : {}", resultat); // Résultat : 10
@@ -89,5 +92,21 @@ fn main() {
         Some(Ordering::Equal) => println!("It's the same temperature."),
         None => println!("Temperature comparison is not defined."),
     }
+
+    //Thread
+
+    let handle = thread::spawn(|| {
+        for i in 1..10 {
+            println!("Je suis le thread spawné numéro {}", i);
+            thread::sleep(Duration::from_millis(1));
+        }
+    });
+
+    for i in 1..5 {
+        println!("Je suis le thread principal numéro {}", i);
+        thread::sleep(Duration::from_millis(1));
+    }
+
+    handle.join().unwrap();
 
 }

@@ -4,6 +4,7 @@ mod lifetime;
 mod option_test;
 mod trait_struct;
 mod trait_test;
+use std::sync::mpsc;
 
 use closure_function_high_test::{appliquer, closure_test, doubler};
 use std::cmp::Ordering;
@@ -109,4 +110,26 @@ fn main() {
 
     handle.join().unwrap();
 
+
+    let (tx, rx) = mpsc::channel();
+
+    // Producteur
+    let producteur = thread::spawn(move || {
+        for i in 0..10 {
+            println!("Production: {}", i);
+            tx.send(i).unwrap();
+            thread::sleep(Duration::from_millis(100));
+        }
+    });
+
+    // Consommateur
+    let consommateur = thread::spawn(move || {
+        while let Ok(valeur) = rx.recv() {
+            println!("  Consommation: {}", valeur);
+            thread::sleep(Duration::from_millis(200));
+        }
+    });
+
+    producteur.join().unwrap();
+    consommateur.join().unwrap();
 }
